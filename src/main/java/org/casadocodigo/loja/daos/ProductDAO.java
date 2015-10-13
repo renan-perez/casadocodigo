@@ -10,18 +10,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ProductDAO {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	public void save(Product product) {
 		entityManager.persist(product);
 	}
-	
+
 	public void save(List<Product> products) {
 		for (Product product : products) {
 			entityManager.persist(product);
 		}
 	}
-	
+
+	public List<Product> list() {
+		return entityManager.createQuery(
+				"select distinct(p) from Product p join fetch p.prices",
+				Product.class).getResultList();
+	}
 }
