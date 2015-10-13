@@ -1,14 +1,18 @@
 package org.casadocodigo.loja.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.casadocodigo.loja.daos.ProductDAO;
 import org.casadocodigo.loja.enums.BookType;
 import org.casadocodigo.loja.models.Product;
+import org.casadocodigo.loja.validation.ProductValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +25,11 @@ public class ProductsController {
 
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.setValidator(new ProductValidator());
+	}
 
 	@RequestMapping("/form")
 	public ModelAndView form() {
@@ -32,7 +41,7 @@ public class ProductsController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String save(Product product, RedirectAttributes redirectAttributes) {
+	public String save(@Valid Product product, RedirectAttributes redirectAttributes) {
 
 		productDAO.save(product);
 		redirectAttributes.addFlashAttribute("Sucesso",
@@ -44,13 +53,8 @@ public class ProductsController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
 		
-		List<Product> products = productDAO.list();
-		for (Product p : products) {
-			System.out.println(p.getTitle());
-		}
-		
 		ModelAndView modelAndView = new ModelAndView("products/list");
-		modelAndView.addObject("products", products);
+		modelAndView.addObject("products", productDAO.list());
 		
 		return modelAndView;
 	}
