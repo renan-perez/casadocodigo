@@ -1,18 +1,14 @@
 package org.casadocodigo.loja.controllers;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.casadocodigo.loja.daos.ProductDAO;
 import org.casadocodigo.loja.enums.BookType;
 import org.casadocodigo.loja.models.Product;
-import org.casadocodigo.loja.validation.ProductValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,14 +21,14 @@ public class ProductsController {
 
 	@Autowired
 	private ProductDAO productDAO;
-	
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.setValidator(new ProductValidator());
-	}
+
+	/*
+	 * @InitBinder public void initBinder(WebDataBinder binder) {
+	 * binder.setValidator(new ProductValidator()); }
+	 */
 
 	@RequestMapping("/form")
-	public ModelAndView form() {
+	public ModelAndView form(Product product) {
 
 		ModelAndView modelAndView = new ModelAndView("products/form");
 		modelAndView.addObject("types", BookType.values());
@@ -41,21 +37,25 @@ public class ProductsController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String save(@Valid Product product, RedirectAttributes redirectAttributes) {
+	public ModelAndView save(@Valid Product product, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
+		
+		if (bindingResult.hasErrors()) {
+			return form(product);
+		}
 
 		productDAO.save(product);
-		redirectAttributes.addFlashAttribute("Sucesso",
-				"Produto cadastrado com sucesso");
+		redirectAttributes.addFlashAttribute("Sucesso", "Produto cadastrado com sucesso");
 
-		return "redirect:produtos";
+		return new ModelAndView("redirect:produtos");
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		
+
 		ModelAndView modelAndView = new ModelAndView("products/list");
 		modelAndView.addObject("products", productDAO.list());
-		
+
 		return modelAndView;
 	}
 

@@ -1,6 +1,5 @@
 package org.casadocodigo.loja.validation;
 
-import org.casadocodigo.loja.enums.ValidationsTypes;
 import org.casadocodigo.loja.models.Product;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -14,14 +13,13 @@ public class ProductValidator implements Validator {
 		Product product = (Product) target;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title",
-				ValidationsTypes.FIELD_REQUIRED.getTipoValidacao());
+				"field.required.product.title");
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description",
-				ValidationsTypes.FIELD_REQUIRED.getTipoValidacao());
+				"field.required.product.description");
 
 		if (product.getPages() == 0) {
-			errors.rejectValue("pages",
-					ValidationsTypes.FIELD_REQUIRED.getTipoValidacao());
+			errors.rejectValue("pages", "typeMismatch.product.pages");
 		}
 	}
 
