@@ -10,8 +10,8 @@ import com.amazonaws.services.s3.S3ClientOptions;
 
 public class AmazonConfiguration {
 
-	private final String ACCESS_KEY = "AKIAIYLGYNIPMVAGOAYQ";
-	private final String SECRET_KEY = "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";
+	private final String ACCESS_KEY = "";
+	private final String SECRET_KEY = "";
 
 	@Bean
 	private AmazonS3 amazonS3client() {
