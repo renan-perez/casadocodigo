@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.casadocodigo.loja.daos.ProductDAO;
 import org.casadocodigo.loja.enums.BookType;
 import org.casadocodigo.loja.models.Product;
-import org.com.casadocodigo.loja.infra.FileSarver;
+import org.com.casadocodigo.loja.infra.FileServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class ProductsController {
 	private ProductDAO productDAO;
 	
 	@Autowired
-	private FileSarver fileSaver;
+	private FileServer fileSaver;
 	
 	public static String FILE_UPLOADED_FOLDER = "uploaded-file";
 

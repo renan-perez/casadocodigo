@@ -2,7 +2,7 @@ package org.casadocodigo.loja.conf;
 
 import org.casadocodigo.loja.controllers.HomeController;
 import org.casadocodigo.loja.daos.ProductDAO;
-import org.com.casadocodigo.loja.infra.FileSarver;
+import org.com.casadocodigo.loja.infra.FileServer;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @EnableWebMvc
 @ComponentScan(basePackageClasses = { HomeController.class, ProductDAO.class,
-		FileSarver.class })
+		FileServer.class })
 public class AppWebConfiguration {
 
 	@Bean
